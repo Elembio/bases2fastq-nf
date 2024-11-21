@@ -1,0 +1,35 @@
+{
+    "RunID": "20230404-Bases2Fastq-Sim",
+    "RunName": "20230404-Bases2Fastq-Sim",
+    "FlowcellID": "I250081-5",
+    "InstrumentName": "P2-04",
+    "BaseForChannels": [
+        "C",
+        "A",
+        "G",
+        "T"
+    ],
+    "Tiles": [
+        "L1R02C01S1",
+        "L2R21C01S1",
+        "L1R02C01S2",
+        "L2R21C01S2",
+        "L1R03C01S2",
+        "L2R20C01S2",
+        "L1R03C01S1",
+        "L2R20C01S1",
+        "L1R04C01S1",
+        "L2R19C01S1"
+    ],
+    "FileVersion": "2.0.0",
+    "ChemistryVersion": "2",
+    "KitConfiguration": "300Cycles",
+    "PreparationWorkflow": "Adept",
+    "ReadOrder": "I1,I2,R1,R2",
+    "Cycles": {
+        "I1": 9,
+        "I2": 9,
+        "R1": 151,
+        "R2": 151
+    }
+}

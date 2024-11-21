@@ -4,11 +4,11 @@ nextflow_pipeline {
     script "main.nf"
 
     test("test_basic") {
-
+        tag "local"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects --settings 'R1AdapterTrim,true' --settings 'R2AdapterTrim,true'"
@@ -24,11 +24,11 @@ nextflow_pipeline {
     }
 
     test("test_custom_manifest_local") {
-
+        tag "local"
         when {
             params {
-                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects --settings 'R1AdapterTrim,true' --settings 'R2AdapterTrim,true' -r ${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/RunManifest.csv"
@@ -44,11 +44,11 @@ nextflow_pipeline {
     }
 
     test("test_custom_manifest_rundir") {
-
+        tag "local"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects --settings 'R1AdapterTrim,true' --settings 'R2AdapterTrim,true' -r run/20230404-bases2fastq-sim-151-151-9-9/RunManifest_custom.csv"            
@@ -64,11 +64,11 @@ nextflow_pipeline {
     }
 
     test("test_custom_manifest_s3") {
-
+        tag "cloud"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects -r s3://element-public-data/bases2fastq-share/bases2fastq-v2/20230404-bases2fastq-sim-151-151-9-9/RunManifest_custom.csv"
@@ -84,11 +84,12 @@ nextflow_pipeline {
     }
 
     test("test_index_fastq") {
+        tag "local"
 
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--settings 'I1Fastq,true' --settings 'I2Fastq,true' --settings 'R1AdapterTrim,true' --settings 'R2AdapterTrim,true'"
@@ -104,11 +105,11 @@ nextflow_pipeline {
     }
 
     test("test_legacy_fastq") {
-
+        tag "local"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--legacy-fastq"
@@ -124,11 +125,11 @@ nextflow_pipeline {
     }
 
     test("test_projects") {
-
+        tag "local"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = ""
@@ -144,11 +145,11 @@ nextflow_pipeline {
     }
 
     test("test_qc_only") {
-
+        tag "local"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--qc-only"
@@ -164,11 +165,11 @@ nextflow_pipeline {
     }
 
     test("test_s3") {
-
+        tag "cloud"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9"
-                b2f_run_dir = "s3://element-public-data/bases2fastq-share/bases2fastq-v2/20230404-bases2fastq-sim-151-151-9-9/"
+                run_dir = "s3://element-public-data/bases2fastq-share/bases2fastq-v2/20230404-bases2fastq-sim-151-151-9-9/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects"
@@ -184,11 +185,11 @@ nextflow_pipeline {
     }
 
     test("test_s3_zipped") {
-
+        tag "cloud"
         when {
             params {
                 id = "20230404-bases2fastq-sim-151-151-9-9-zipped"
-                b2f_run_dir = "s3://element-public-data/bases2fastq-share/bases2fastq-v2/20230404-bases2fastq-sim-151-151-9-9-zipped/"
+                run_dir = "s3://element-public-data/bases2fastq-share/bases2fastq-v2/20230404-bases2fastq-sim-151-151-9-9-zipped/"
                 b2f_container_url = "elembio/bases2fastq"
                 b2f_container_tag = "latest"
                 b2f_args = "--no-projects"
@@ -203,5 +204,265 @@ nextflow_pipeline {
 
     }
 
+    test("test_legacy_fastq_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                legacy_fastq = true
+                outdir = "$outputDir"
+            }
+        }
 
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+    }
+
+
+    test("test_detect_adapters_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                detect_adapters = true
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_exclude_tile_option_multiple") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                exclude_tile= ["L1R02C..S.","L2R01C..S."]
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_exclude_tile_option_single") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                exclude_tile= ["L1R02C..S."]
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_include_tile_option_single") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                exclude_tile= ["L.R..C..S."]
+                include_tile=["L2R2.C..S."]
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_filter_mask_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                filter_mask="I1:Y4N*"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_flowcell_id_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                flowcell_id="fc-from-params-1"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_force_index_orientation_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                force_index_orientation=true
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_num_unassigned_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                num_unassigned=45 
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_qc_only_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                qc_only= false 
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_settings_option_multiple") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                settings=["I1Fastq,True", "I2Fastq,True"]
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_settings_option_single") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                settings=["I1Fastq,True"]
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
+
+    test("test_split_lanes_option") {
+        tag "local" 
+        when {
+            params {
+                id = "20230404-bases2fastq-sim-151-151-9-9"
+                run_dir = "${baseDir}/data/20230404-bases2fastq-sim-151-151-9-9/"
+                b2f_container_url = "docker.io/elembio/bases2fastq"
+                b2f_container_tag = "latest"
+                split_lanes=false
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 1
+        }
+
+    }
 }
+
