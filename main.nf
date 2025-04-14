@@ -23,6 +23,7 @@ log.info """
  split_lanes: ${params.split_lanes}
  b2f_container_url: ${params.b2f_container_url}
  b2f_container_tag: ${params.b2f_container_tag}
+ disable_task_publish: ${params.disable_task_publish}
  outdir: ${params.outdir}
  """
  
