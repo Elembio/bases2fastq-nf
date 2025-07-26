@@ -1,5 +1,17 @@
 {
-    "name": "elembio/base2fastq",
-    "homePage": "https://github.com/Elembio/bases2fastq-nf",
-    "repos": {}
+  "name": "elembio/base2fastq",
+  "homePage": "https://github.com/Elembio/bases2fastq-nf",
+  "repos": {
+    "https://github.com/nf-core/modules.git": {
+      "modules": {
+        "nf-core": {
+          "multiqc": {
+            "branch": "master",
+            "git_sha": "c9a31c472ef2d86802eb44f27322955849859361",
+            "installed_by": ["modules"]
+          }
+        }
+      }
+    }
+  }
 }

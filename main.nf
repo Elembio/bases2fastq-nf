@@ -28,6 +28,7 @@ log.info """
  """
  
 include { BASES2FASTQ } from './modules/local/bases2fastq'
+include { MULTIQC } from './modules/nf-core/multiqc'
 
 //bases2fastq optional path params
 def run_manifest = params.run_manifest ? file(params.run_manifest, checkIfExists: true) : []
@@ -37,6 +38,18 @@ workflow {
     BASES2FASTQ (
         params.run_dir,
         run_manifest
-     )
+    )
+
+     // MultiQC
+    ch_multiqc_config = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+    ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
+    ch_multiqc_logo = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.fromPath("$projectDir/assets/Element_Biosciences_Logo_Black_RGB.png", checkIfExists: true)
+
+    MULTIQC (
+        BASES2FASTQ.out.run_stats,
+        ch_multiqc_config.toList(),
+        ch_multiqc_custom_config.toList(),
+        ch_multiqc_logo.toList()
+    )
 }
 
