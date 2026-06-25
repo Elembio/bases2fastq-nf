@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/elembio/base2fastq/master/nextflow_schema.json",
-  "title": "elembio/base2fastq pipeline parameters",
+  "$id": "https://raw.githubusercontent.com/elembio/bases2fastq-nf/main/nextflow_schema.json",
+  "title": "elembio/bases2fastq-nf pipeline parameters",
   "description": "FASTQ generation using Bases2Fastq for Element AVITI System",
   "type": "object",
   "$defs": {
@@ -10,175 +10,258 @@
       "type": "object",
       "fa_icon": "fas fa-terminal",
       "description": "Define where the pipeline should find input data and save output data.",
-      "required": ["run_dir", "outdir"],
       "properties": {
         "run_dir": {
           "type": "string",
-          "description": "Input run directory"
+          "description": "Path to AVITI run directory (local or S3)"
         },
         "outdir": {
           "type": "string",
           "format": "directory-path",
-          "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+          "description": "The output directory where the results will be saved.",
           "fa_icon": "fas fa-folder-open",
-          "default": "."
+          "default": "./results"
         },
-        "run_manifest": {
+        "id": {
           "type": "string",
-          "description": "(optional) path to custom RunManifest.csv"
+          "hidden": true,
+          "description": "Optional run identifier. If not set: when run_dir matches .../runs/<instrument>/<run_id>/analysis/<analysis_id>/..., that run_id is used; otherwise the last path segment of run_dir."
+        }
+      }
+    },
+    "shared_filters": {
+      "title": "Shared Filters",
+      "type": "object",
+      "description": "Filters shared with other Element pipelines for consistent data subsetting.",
+      "default": "",
+      "properties": {
+        "tile": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tile regex pattern(s). Falls back to b2f_include_tile when that param is empty."
+        },
+        "filter_batch": {
+          "type": "string",
+          "description": "Restrict to specific batch(es), comma-delimited (e.g. B01,B02)"
         }
       }
     },
     "bases2fastq": {
       "title": "Bases2Fastq",
       "type": "object",
-      "description": "",
+      "description": "Parameters for the bases2fastq (b2f) process.",
       "default": "",
       "properties": {
-        "legacy_fastq": {
-          "type": "boolean",
-          "description": "Apply a legacy file naming convention to FASTQ files, such as SampleName_S1_L001_R1_001.fastq.gz. Some secondary analysis software might require this naming convention."
-        },
-        "detect_adapters": {
-          "type": "boolean",
-          "description": "Detect adapter sequences and override any sequences present in the run manifest."
-        },
-        "force_index_orientation": {
-          "type": "boolean",
-          "description": "Perform demultiplexing without detecting the index sequence orientation. When used, Bases2Fastq applies the orientation recorded in the run manifest."
-        },
-        "num_unassigned": {
-          "type": "number",
-          "description": "Indicates the maximum number of unassigned sequences to support.",
-          "minimum": 1,
-          "maximum": 1000
-        },
-        "qc_only": {
-          "type": "boolean",
-          "description": "Enable QC-only mode, which generates a representative view of run metrics on one tile and no FASTQ files. Executions in QC-only mode are faster than executions with demultiplexing."
-        },
-        "split_lanes": {
-          "type": "boolean",
-          "description": "Divide FASTQ files by flow cell lane."
-        },
-        "settings": {
+        "b2f_run_manifest": {
           "type": "string",
-          "default": "[]",
-          "description": "Overwrite run manifest settings. May be applies more than once."
+          "description": "Path to a custom RunManifest.csv file. Passed to bases2fastq via -r."
         },
-        "flowcell_id": {
-          "type": "string",
-          "description": "Overwrite the flow cell ID in RunParameters.json with another flow cell ID. You can use this argument to add a missing flow cell ID."
-        },
-        "filter_mask": {
-          "type": "string",
-          "description": "\"Apply a custom base mask to specify the cycles that determine if a read passes filter. Separate each read section with a hyphen. The argument is only compatible with Cloudbreak or Cloudbreak Freestyle chemistry"
-        }
-      }
-    },
-    "bases2fastq_advanced_settings": {
-      "title": "Bases2Fastq Advanced Settings",
-      "type": "object",
-      "description": "",
-      "default": "",
-      "properties": {
-        "exclude_tile": {
-          "type": "string",
-          "default": "[]",
-          "description": "Specify subset of tiles to exclude from processing. Use a regex to identify the tiles (e.g. 'L1R..C..S.')"
-        },
-        "include_tile": {
-          "type": "string",
-          "default": "[]",
-          "description": "Specify subset of tiles to include in processing. Use a regex to identify the tiles (e.g. 'L1R..C..S.'). To include specific tiles, you must first exclude all tiles with the exclude-tile parameter"
-        },
-        "no_error_on_invalid": {
+        "b2f_demux_only": {
           "type": "boolean",
-          "description": "Skip non-critical files that Bases2Fastq identifies as invalid"
+          "description": "Only demultiplex, skip FASTQ generation"
+        },
+        "b2f_detect_adapters": {
+          "type": "boolean",
+          "description": "Detect and trim adapters"
+        },
+        "b2f_error_on_missing": {
+          "type": "boolean",
+          "description": "Error on missing files in the run directory"
+        },
+        "b2f_force_detect_index_orientation": {
+          "type": "boolean",
+          "description": "Detect index orientation by scanning all tiles and using the highest-PF tile in each lane (bases2fastq >= 2.4.0)"
+        },
+        "b2f_force_index_orientation": {
+          "type": "boolean",
+          "description": "Force index read orientation"
+        },
+        "b2f_group_fastq": {
+          "type": "boolean",
+          "description": "Group FASTQs by sample"
+        },
+        "b2f_legacy_fastq": {
+          "type": "boolean",
+          "description": "Use legacy naming: SampleName_S1_L001_R1_001.fastq.gz"
+        },
+        "b2f_no_error_on_invalid": {
+          "type": "boolean",
+          "description": "Skip invalid files instead of erroring"
+        },
+        "b2f_no_projects": {
+          "type": "boolean",
+          "description": "Disable project directories (flat Samples/ layout)"
+        },
+        "b2f_per_target_fastq": {
+          "type": "boolean",
+          "description": "Create per-target FASTQ for each cell assignment target"
+        },
+        "b2f_qc_only": {
+          "type": "boolean",
+          "description": "Generate QC metrics only, no FASTQs"
+        },
+        "b2f_skip_empty_fq_files": {
+          "type": "boolean",
+          "description": "Do not create FASTQ files for sample/read outputs with zero reads (bases2fastq >= 2.4.0)"
+        },
+        "b2f_skip_multi_qc": {
+          "type": "boolean",
+          "description": "Skip MultiQC report generation"
+        },
+        "b2f_skip_qc_report": {
+          "type": "boolean",
+          "description": "Skip QC report generation"
+        },
+        "b2f_bgzf_compression": {
+          "type": "boolean",
+          "description": "Use BGZF block compression for FASTQ output; produces a .fastq.gz.gzi index alongside each FASTQ"
+        },
+        "b2f_split_lanes": {
+          "type": "boolean",
+          "description": "Split output by lane"
+        },
+        "b2f_cyto_fastq_mask": {
+          "type": "string",
+          "description": "Cycle mask for cyto FASTQ generation"
+        },
+        "b2f_filter_mask": {
+          "type": "string",
+          "description": "Filter mask value for bases2fastq"
+        },
+        "b2f_flowcell_id": {
+          "type": "string",
+          "description": "Override flowcell ID"
+        },
+        "b2f_log_level": {
+          "type": "string",
+          "description": "Log level: DEBUG, INFO, WARNING, ERROR"
+        },
+        "b2f_num_unassigned": {
+          "type": ["integer", "null"],
+          "default": null,
+          "description": "Maximum unassigned sequences to report"
+        },
+        "b2f_panel_json": {
+          "type": "string",
+          "description": "Path to Panel.json file"
+        },
+        "b2f_segmentation": {
+          "type": "string",
+          "description": "Path to CellSegmentation/ directory (local or remote). Forwarded to bases2fastq via --segmentation (requires bases2fastq >= 2.4.0)."
+        },
+        "b2f_analysis_region": {
+          "type": "string",
+          "description": "Path to AnalysisRegion/ directory (local or remote). Forwarded to bases2fastq via --analysis-region (requires bases2fastq >= 2.4.0)."
+        },
+        "b2f_tca_manifest_csv": {
+          "type": "string",
+          "description": "Path to TargetCellAssignment manifest CSV"
+        },
+        "b2f_include_tile": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tile inclusion regex patterns. When set, auto-excludes all tiles so includes work as a filter. Falls back to shared tile param if empty."
+        },
+        "b2f_exclude_tile": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tile exclusion regex patterns. Auto-populated when include tiles are active."
+        },
+        "b2f_settings": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Repeated --settings 'key,val' entries"
         },
         "b2f_args": {
           "type": "string",
-          "description": "Send a string of arguments to Bases2Fastq. Recommended for local testing & development only."
+          "hidden": true,
+          "deprecated": true,
+          "description": "DEPRECATED: catch-all string appended to bases2fastq CLI. Prefer overriding `withName: BASES2FASTQ { ext.args = { ... } }` in a `-c custom.config` overlay; see conf/modules.config for the canonical closure. Will be removed in a future release."
+        }
+      }
+    },
+    "docker_containers": {
+      "title": "Docker Containers",
+      "type": "object",
+      "description": "Docker container image URLs and version tags.",
+      "default": "",
+      "properties": {
+        "b2f_container_url": {
+          "type": "string",
+          "default": "904220683607.dkr.ecr.us-west-2.amazonaws.com/bases2fastq-release",
+          "description": "bases2fastq container repository"
+        },
+        "b2f_container_tag": {
+          "type": "string",
+          "default": "2.4.0",
+          "description": "bases2fastq container version tag"
         }
       }
     },
     "infrastructure": {
       "title": "Infrastructure",
       "type": "object",
-      "description": "",
+      "description": "Resource limits and pipeline infrastructure settings.",
       "default": "",
       "properties": {
         "max_cpus": {
           "type": "integer",
-          "default": 48
+          "default": 48,
+          "hidden": true
         },
         "max_memory": {
           "type": "string",
-          "default": "192.GB"
+          "default": "384.GB",
+          "hidden": true
         },
         "max_time": {
           "type": "string",
-          "default": "8.h"
-        },
-        "b2f_container_url": {
-          "type": "string",
-          "default": "docker.io/elembio/bases2fastq"
-        },
-        "b2f_container_tag": {
-          "type": "string",
-          "default": "latest"
-        },
-        "tracedir": {
-          "type": "string",
-          "default": "./pipeline_info"
-        },
-        "enable_conda": {
-          "type": "boolean"
+          "default": "8.h",
+          "hidden": true
         },
         "publish_dir_mode": {
           "type": "string",
-          "default": "copy"
+          "default": "copy",
+          "hidden": true
+        },
+        "tracedir": {
+          "type": "string",
+          "default": "./results/pipeline_info",
+          "hidden": true
+        },
+        "enable_conda": {
+          "type": "boolean",
+          "hidden": true
+        },
+        "disable_task_publish": {
+          "type": "boolean",
+          "hidden": true
         },
         "custom_config_version": {
           "type": "string",
-          "default": "master"
+          "default": "main",
+          "hidden": true
         },
         "custom_config_base": {
           "type": "string",
-          "default": "https://raw.githubusercontent.com/nf-core/configs/master"
-        },
-        "config_profile_description": {
-          "type": "string"
-        },
-        "config_profile_contact": {
-          "type": "string"
-        },
-        "config_profile_url": {
-          "type": "string"
+          "default": "https://raw.githubusercontent.com/Elembio/configs/main",
+          "hidden": true
         },
         "config_profile_name": {
-          "type": "string"
-        }
-      }
-    },
-    "multiqc": {
-      "title": "MultiQC",
-      "type": "object",
-      "description": "",
-      "default": "",
-      "properties": {
-        "multiqc_title": {
-          "type": "string"
-        },
-        "max_multiqc_email_size": {
           "type": "string",
-          "default": "25.MB"
+          "hidden": true
         },
-        "multiqc_logo": {
-          "type": "string"
+        "config_profile_description": {
+          "type": "string",
+          "hidden": true
         },
-        "multiqc_config": {
-          "type": "string"
+        "config_profile_contact": {
+          "type": "string",
+          "hidden": true
+        },
+        "config_profile_url": {
+          "type": "string",
+          "hidden": true
         }
       }
     }
@@ -188,22 +271,16 @@
       "$ref": "#/$defs/input_output_options"
     },
     {
+      "$ref": "#/$defs/shared_filters"
+    },
+    {
       "$ref": "#/$defs/bases2fastq"
     },
     {
-      "$ref": "#/$defs/bases2fastq_advanced_settings"
+      "$ref": "#/$defs/docker_containers"
     },
     {
       "$ref": "#/$defs/infrastructure"
-    },
-    {
-      "$ref": "#/$defs/multiqc"
     }
-  ],
-  "properties": {
-    "projects": {
-      "type": "boolean",
-      "default": true
-    }
-  }
+  ]
 }

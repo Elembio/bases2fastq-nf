@@ -1,0 +1,145 @@
+name: bases2fastq
+description: Demultiplex raw AVITI base calls into per-sample FASTQ files using Element Biosciences bases2fastq
+keywords:
+  - demultiplexing
+  - fastq
+  - aviti
+  - element biosciences
+tools:
+  - bases2fastq:
+      description: FASTQ generation tool for Element AVITI sequencing data
+      homepage: https://docs.elembio.io/docs/bases2fastq/introduction/
+      licence: ["Proprietary"]
+
+input:
+  - meta:
+      type: map
+      description: 'Groovy map containing run metadata (e.g., `[id: run_id]`)'
+  - run_dir:
+      type: val
+      description: Path to AVITI run directory (not staged; bases2fastq accesses directly)
+  - run_manifest:
+      type: file
+      description: Optional custom RunManifest.csv (empty list if not provided)
+      pattern: "*.csv"
+  - segmentation:
+      type: directory
+      description: |
+        Optional CellSegmentation/ directory (empty list if not provided).
+        Passed to bases2fastq via `--segmentation`. Available since
+        bases2fastq 2.4.0; older container tags ignore this input
+        because the flag did not exist (the module conditionally appends
+        `--segmentation` only when a non-empty path is staged).
+  - analysis_region:
+      type: directory
+      description: |
+        Optional AnalysisRegion/ directory (empty list if not provided).
+        Passed to bases2fastq via `--analysis-region`. Same compatibility
+        story as `segmentation` — only effective on bases2fastq 2.4.0
+        or newer.
+  - panel:
+      type: file
+      description: |
+        Optional panel JSON (empty list if not provided). Passed to bases2fastq
+        via `--panel`. Previously read from `params.b2f_panel_json` directly;
+        now a proper channel input so the file is staged into the work dir.
+      pattern: "*.json"
+  - tca_manifest:
+      type: file
+      description: |
+        Optional TargetCellAssignmentManifest CSV (empty list if not provided).
+        Passed to bases2fastq via `--tca-manifest`. Previously read from
+        `params.b2f_tca_manifest_csv` directly; now a proper channel input
+        so the file is staged into the work dir.
+      pattern: "*.csv"
+
+output:
+  - panel_json:
+      type: file
+      description: Assay panel configuration
+      pattern: "Panel.json"
+  - metrics_csv:
+      type: file
+      description: Run-level demux metrics
+      pattern: "Metrics.csv"
+  - index_assignment_csv:
+      type: file
+      description: Index assignment statistics
+      pattern: "IndexAssignment.csv"
+  - run_manifest_csv:
+      type: file
+      description: Run manifest (CSV)
+      pattern: "RunManifest.csv"
+  - run_manifest_json:
+      type: file
+      description: Run manifest (JSON)
+      pattern: "RunManifest.json"
+  - run_parameter_json:
+      type: file
+      description: Instrument parameters
+      pattern: "RunParameters.json"
+  - run_stats:
+      type: file
+      description: Run-level statistics
+      pattern: "RunStats.json"
+  - unassigned_csv:
+      type: file
+      description: Unassigned sequence report
+      pattern: "UnassignedSequences.csv"
+  - qc_html:
+      type: file
+      description: QC report(s)
+      pattern: "*_QC.html"
+  - sample_fastq:
+      type: file
+      description: Demultiplexed FASTQ files
+      pattern: "Samples/**.fastq.gz"
+  - sample_json:
+      type: file
+      description: Per-sample statistics
+      pattern: "Samples/**_stats.json"
+  - json:
+      type: file
+      description: Per-sample run statistics
+      pattern: "Samples/**_RunStats.json"
+  - project_qc_html:
+      type: file
+      description: Per-project QC reports
+      pattern: "Samples/**_QC.html"
+  - project_metrics_csv:
+      type: file
+      description: Per-project metrics
+      pattern: "Samples/**_Metrics.csv"
+  - project_index_assignment_csv:
+      type: file
+      description: Per-project index assignment
+      pattern: "Samples/**_IndexAssignment.csv"
+  - b2f_log:
+      type: file
+      description: Bases2Fastq process log
+      pattern: "info/Bases2Fastq.log"
+  - manifest_errors_json:
+      type: file
+      description: Manifest validation errors
+      pattern: "info/RunManifestErrors.json"
+  - log:
+      type: file
+      description: Full stdout/stderr log
+      pattern: "run.log"
+  - metrics_dir:
+      type: directory
+      description: |
+        Curated directory mirroring the small-metadata subset of the bases2fastq
+        output root. Populated via relative symlinks with a size cap of 100 MB.
+        Intended for consumption as a single directory input by downstream tools.
+        Bulk artefacts (Samples/**.fastq.gz, info/, *_QC.html) are intentionally excluded.
+      pattern: "metrics"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+
+authors:
+  - "@brlajoie"
+maintainers:
+  - "@brlajoie"
