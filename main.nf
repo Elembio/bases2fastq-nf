@@ -13,6 +13,7 @@ log.info """
  filter_mask: ${params.filter_mask}
  flowcell_id: ${params.flowcell_id}
  force_index_orientation: ${params.force_index_orientation}
+ force_detect_index_orientation: ${params.force_detect_index_orientation}
  include_tile: ${params.include_tile}
  legacy_fastq: ${params.legacy_fastq}
  no_error_on_invalid: ${params.no_error_on_invalid}
@@ -20,6 +21,7 @@ log.info """
  qc_only: ${params. qc_only}
  run_manifest: ${params.run_manifest}
  settings: ${params.settings}
+ skip_empty_fq_files: ${params.skip_empty_fq_files}
  split_lanes: ${params.split_lanes}
  b2f_container_url: ${params.b2f_container_url}
  b2f_container_tag: ${params.b2f_container_tag}

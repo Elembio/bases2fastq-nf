@@ -45,8 +45,10 @@ process BASES2FASTQ {
     def legacy_fastq_option = params.legacy_fastq ? "--legacy-fastq" : ""
     def detect_adapters_option = params.detect_adapters ? "--detect-adapters" : ""
     def force_index_orientation_option = params.force_index_orientation ? "--force-index-orientation" : ""
+    def force_detect_index_orientation_option = params.force_detect_index_orientation ? "--force-detect-index-orientation" : ""
     def no_error_on_invalid_option = params.no_error_on_invalid ? "--no-error-on-invalid" : ""
     def qc_only_option = params.qc_only ? "--qc-only" : ""
+    def skip_empty_fq_files_option = params.skip_empty_fq_files ? "--skip-empty-fq-files" : ""
     def split_lanes_option = params.split_lanes ? "--split-lanes" : ""
     def projects_option = params.projects ? "" : " --no-projects"
     def filter_mask_option = params.filter_mask ? "--filter-mask ${params.filter_mask}" : ""
@@ -67,7 +69,7 @@ process BASES2FASTQ {
     exec 2>&1
 
     echo "${params.b2f_container_url}:${params.b2f_container_tag}"
-    echo "bases2fastq ${run_dir} . -p ${task.cpus} ${b2f_args_option}  ${legacy_fastq_option} ${detect_adapters_option} ${exclude_tile_option} ${include_tile_option} ${filter_mask_option} ${flowcell_id_option} ${force_index_orientation_option} ${no_error_on_invalid_option} ${qc_only_option} ${split_lanes_option}  ${settings_option} ${num_unassigned_option}"
+    echo "bases2fastq ${run_dir} . -p ${task.cpus} ${b2f_args_option}  ${legacy_fastq_option} ${detect_adapters_option} ${exclude_tile_option} ${include_tile_option} ${filter_mask_option} ${flowcell_id_option} ${force_index_orientation_option} ${force_detect_index_orientation_option} ${no_error_on_invalid_option} ${qc_only_option} ${skip_empty_fq_files_option} ${split_lanes_option}  ${settings_option} ${num_unassigned_option}"
 
      bases2fastq \\
         ${run_dir} \\
@@ -83,8 +85,10 @@ process BASES2FASTQ {
         ${filter_mask_option} \\
         ${flowcell_id_option} \\
         ${force_index_orientation_option} \\
+        ${force_detect_index_orientation_option} \\
         ${no_error_on_invalid_option} \\
         ${qc_only_option} \\
+        ${skip_empty_fq_files_option} \\
         ${split_lanes_option} \\
         ${settings_option} \\
         ${num_unassigned_option}

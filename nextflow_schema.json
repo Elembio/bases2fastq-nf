@@ -47,6 +47,10 @@
           "type": "boolean",
           "description": "Perform demultiplexing without detecting the index sequence orientation. When used, Bases2Fastq applies the orientation recorded in the run manifest."
         },
+        "force_detect_index_orientation": {
+          "type": "boolean",
+          "description": "Use all polonies, including those that do not pass filter, to detect index orientation. Use at your own discretion when no tile reaches the default 70% PF threshold during feature detection."
+        },
         "num_unassigned": {
           "type": "number",
           "description": "Indicates the maximum number of unassigned sequences to support.",
@@ -56,6 +60,10 @@
         "qc_only": {
           "type": "boolean",
           "description": "Enable QC-only mode, which generates a representative view of run metrics on one tile and no FASTQ files. Executions in QC-only mode are faster than executions with demultiplexing."
+        },
+        "skip_empty_fq_files": {
+          "type": "boolean",
+          "description": "Suppress generation of empty FASTQ files for samples with zero reads."
         },
         "split_lanes": {
           "type": "boolean",
